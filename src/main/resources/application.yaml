@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: TaskMaster
+  datasource:
+    url: jdbc:postgresql://localhost:5432/taskmaster
+    username: postgres
+    password: postgresql
+    driverClassName: org.postgresql.Driver
+#spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
