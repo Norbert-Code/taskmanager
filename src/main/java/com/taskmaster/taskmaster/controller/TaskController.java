@@ -5,9 +5,7 @@ import com.taskmaster.taskmaster.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,7 +19,31 @@ public class TaskController {
 
     @GetMapping("/")
     public ResponseEntity<List<Task>> getAllTasks() {
-        List<Task> list = taskService.getAllTasks();
-        return ResponseEntity.ok().body(list);
+        return ResponseEntity.ok().body(taskService.getAllTasks());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Task> getTask(@PathVariable Long id) {
+        return taskService.getTaskById(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/")
+    public ResponseEntity<Task> createTask(@Validated @RequestBody Task task) {
+        return ResponseEntity.ok().body(taskService.saveTask(task));
+    }
+
+    @PutMapping("/")
+    public ResponseEntity<Task> updateTask(@Validated @RequestBody Task task) {
+        return ResponseEntity.ok().body(taskService.updateTask(task));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
+        if (taskService.deleteTaskById(id)) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 }
