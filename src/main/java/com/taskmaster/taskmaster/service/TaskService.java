@@ -4,6 +4,9 @@ import com.taskmaster.taskmaster.entity.Task;
 import com.taskmaster.taskmaster.repository.TaskRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,8 +19,8 @@ public class TaskService {
 
     private final TaskRepo taskRepo;
 
-    public List<Task> getAllTasks() {
-        return taskRepo.findAll();
+    public Page<Task> getAllTasks(Pageable pageRequest) {
+        return taskRepo.findAll(pageRequest);
     }
 
     public Optional<Task> getTaskById(Long id) {
@@ -38,5 +41,9 @@ public class TaskService {
             return true;
         }
         return false;
+    }
+
+    public Page<Task> searchTasks(String name, Long typeId, Long statusId, Long priorityId, Pageable pageable) {
+        return taskRepo.searchTasks(name, typeId, statusId, priorityId, pageable);
     }
 }
